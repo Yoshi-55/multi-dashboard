@@ -1,73 +1,143 @@
-# React + TypeScript + Vite
+# ✨ Multi Dashboard MVP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**専用ワークスペース**
 
-Currently, two official plugins are available:
+1ページで複数の機能（ポモドーロタイマー、音楽プレイヤー、GitHub情報、天気）をまとめて確認できるダッシュボード。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 機能概要
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ポモドーロタイマー
+- **作業時間**: 25分 / **休憩時間**: 5分の自動切り替え
+- 再生 / 一時停止 / リセット機能
+- 現在のモード（作業 / 休憩）を視覚的に表示
 
-## Expanding the ESLint configuration
+### 音楽プレイヤー
+- 学習用BGM 4曲をプリセット
+- 再生 / 一時停止 / 前後の曲に切り替え
+- アルバムアート表示
+- トラック情報（曲名、アーティスト、長さ）表示
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### GitHub カード
+- 複数ユーザーの情報を切り替え表示
+- ユーザープロフィール（フォロワー数、リポジトリ数など）
+- トップリポジトリの詳細（スター数、フォーク数、言語）
+- プロフィールへの直接リンク
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 天気カード
+- 複数都市の天気情報を切り替え表示
+- 気温 / 体感気温 / 湿度 / 風速
+- 天気アイコン（晴れ、雨、曇り）表示
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## プロジェクト構造
+
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+multi-dashboard/
+├── docker-compose.yml              # Docker 設定
+├── Dockerfile                      # Docker イメージ定義
+├── .dockerignore                   # Docker ビルド除外
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── index.html
+│
+└── src/
+    ├── features/                   ← 機能ごと
+    │   ├── pomodoro/
+    │   │   ├── components/
+    │   │   │   └── PomodoroTimer.tsx
+    │   │   ├── containers/
+    │   │   │   └── PomodoroContainer.tsx
+    │   │   ├── hooks/
+    │   │   │   └── usePomodoro.ts
+    │   │   ├── styles/
+    │   │   │   └── pomodoro.css
+    │   │   ├── types/
+    │   │   │   └── index.ts
+    │   │   ├── data/
+    │   │   │   └── mockTracks.ts
+    │   │   └── index.ts
+    │   │
+    │   ├── music/
+    │   │   ├── components/
+    │   │   │   └── MusicPlayer.tsx
+    │   │   ├── containers/
+    │   │   │   └── MusicContainer.tsx
+    │   │   ├── hooks/
+    │   │   │   └── useMusicSelector.ts
+    │   │   ├── styles/
+    │   │   │   └── music.css
+    │   │   ├── types/
+    │   │   │   └── index.ts
+    │   │   ├── data/
+    │   │   │   └── mockTracks.ts
+    │   │   └── index.ts
+    │   │
+    │   ├── github/
+    │   │   ├── components/
+    │   │   │   └── GitHubCard.tsx
+    │   │   ├── containers/
+    │   │   │   └── GitHubContainer.tsx
+    │   │   ├── hooks/
+    │   │   │   └── useGitHubSelector.ts
+    │   │   ├── styles/
+    │   │   │   └── github.css
+    │   │   ├── types/
+    │   │   │   └── index.ts
+    │   │   ├── data/
+    │   │   │   └── mockGitHubUsers.ts
+    │   │   └── index.ts
+    │   │
+    │   └── weather/
+    │       ├── components/
+    │       │   └── WeatherCard.tsx
+    │       ├── containers/
+    │       │   └── WeatherContainer.tsx
+    │       ├── hooks/
+    │       │   └── useWeatherSelector.ts
+    │       ├── styles/
+    │       │   └── weather.css
+    │       ├── types/
+    │       │   └── index.ts
+    │       ├── data/
+    │       │   └── mockWeatherData.ts
+    │       └── index.ts
+    │
+    ├── pages/                      ← ページ / 画面
+    │   └── dashboard/
+    │       ├── components/
+    │       │   ├── DashboardPage.tsx
+    │       │   ├── Sidebar.tsx
+    │       │   ├── CenterSection.tsx
+    │       │   ├── RightSection.tsx
+    │       │   └── DashboardLayout.tsx
+    │       ├── containers/
+    │       │   └── DashboardContainer.tsx
+    │       ├── hooks/
+    │       │   └── useDashboardState.ts
+    │       ├── styles/
+    │       │   └── dashboard.css
+    │       ├── types/
+    │       │   └── index.ts
+    │       └── index.ts
+    │
+    ├── shared/                     ← 全機能で共有
+    │   ├── components/
+    │   │   ├── Header.tsx
+    │   │   └── Footer.tsx
+    │   ├── hooks/
+    │   └── utils/
+    │
+    ├── styles/                     ← グローバルスタイル
+    │   └── global.css
+    │
+    ├── types/                      ← グローバル型定義
+    │   └── index.ts
+    │
+    ├── App.tsx                     ← ルートコンポーネント
+    ├── main.tsx
+    └── index.css                   ← Tailwind v4.0 CSS
 ```
